@@ -1,0 +1,17 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesModeSetFromSettings
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "MNP Detector Pro"
+include ':app'

@@ -1,0 +1,2 @@
+// This is the gradle file for the root project
+// We already have the plugin applied in the app-level build.gradle

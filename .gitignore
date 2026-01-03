@@ -1,0 +1,40 @@
+# Built application files
+*.apk
+*.aar
+*.ap_
+
+# Local configuration files
+local.properties
+gradle.properties
+
+# Android Studio generated files
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Gradle
+.gradle/
+!/gradle/wrapper/gradle-wrapper.jar
+
+# Android build outputs
+/build/
+!/app/build/outputs/
+
+# Log files
+*.log
+
+# Generated files
+gen/
+out/
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# resources
+resources

@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">MNP Detector Pro</string>
+    <string name="title_activity_settings">Settings</string>
+    
+    <!-- Main Activity -->
+    <string name="enter_phone_number">Enter phone number</string>
+    <string name="check_number">Check</string>
+    <string name="result_not_ported">Number not ported via MNP</string>
+    <string name="result_ported">Number ported to: %1$s</string>
+    <string name="last_update">Last update: %1$s</string>
+    <string name="number_of_records">Records in database: %1$d</string>
+    
+    <!-- Settings Activity -->
+    <string name="settings_title">Settings</string>
+    <string name="database_section">Database</string>
+    <string name="auto_update_section">Auto Update</string>
+    <string name="overlay_section">Call Overlay</string>
+    <string name="update_now">Update Now</string>
+    <string name="source_url">Source URL</string>
+    <string name="enable_auto_update">Enable Auto Update</string>
+    <string name="update_frequency">Update Frequency</string>
+    <string name="wifi_only">Wi-Fi Only</string>
+    <string name="charging_only">Charging Only</string>
+    <string name="overlay_timeout">Overlay Timeout (seconds)</string>
+    <string name="background_service_notification">MNP Detector Pro is running</string>
+    
+    <!-- Call Overlay -->
+    <string name="ported_call_notification">📞 Number ported to: %1$s</string>
+</resources>
