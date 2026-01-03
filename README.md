@@ -21,6 +21,14 @@ An Android application that detects and displays the carrier for incoming calls 
 - **Networking**: Retrofit + OkHttp
 - **Coroutines**: For asynchronous operations
 
+## Build Configuration
+
+- Minimum SDK: 24 (Android 7.0)
+- Target SDK: 34 (Android 14)
+- Dependencies managed via Gradle
+- GitHub Actions for CI/CD
+- Requires Java 8 or higher for building
+
 ## GitHub Actions Build
 
 This project includes GitHub Actions workflows for automatic APK building:
@@ -43,6 +51,18 @@ To use this project with GitHub Actions:
 5. Push the complete project to your GitHub repository
 
 **Note**: The Gradle configuration files have been updated to fix compatibility issues. The project now uses proper syntax for repositoriesMode, buildscript placement, and kapt plugin for Hilt dependency injection. Hilt plugin is now applied manually using 'apply plugin' syntax to avoid conflicts with the plugins block.
+
+**Important**: Before building the project, ensure you have Android SDK installed and properly configured. If you encounter an SDK location error, create a `local.properties` file in the project root with the path to your Android SDK:
+
+```
+sdk.dir=/path/to/your/android/sdk
+```
+
+For macOS, the default location is usually `/Users/username/Library/Android/sdk`.
+For Windows, it's typically `C:\\Users\\Username\\AppData\\Local\\Android\\Sdk`.
+For Linux, it's commonly `/home/username/Android/Sdk`.
+
+**Note**: This project now uses KSP (Kotlin Symbol Processing) instead of kapt for annotation processing. KSP provides faster compilation and better compatibility.
 
 ## Project Structure
 
@@ -69,7 +89,7 @@ app/src/main/
 ## Build Instructions
 
 ### Local Build
-1. Ensure you have Java 17 installed
+1. Ensure you have Java 8 or higher installed
 2. Clone the repository
 3. Open in Android Studio
 4. Sync the project with Gradle files

@@ -21,36 +21,36 @@ class DatabaseUpdateWorker @AssistedInject constructor(
     private val preferencesHelper: PreferencesHelper,
     private val zipHelper: ZipHelper
 ) : CoroutineWorker(context, params) {
-    
+
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         return@withContext try {
             val sourceUrl = preferencesHelper.getSourceUrl()
-            
+
             // Download the file
             val downloadedFile = zipHelper.downloadFile(sourceUrl)
-            
+
             if (downloadedFile != null) {
                 // Extract and parse the data
                 val mnpNumbers = zipHelper.extractAndParseMnpData(downloadedFile)
-                
+
                 // Clear existing data and insert new data in a transaction
                 repository.clearAllMnpNumbers()
                 repository.insertAllMnpNumbers(mnpNumbers)
-                
+
                 // Update metadata
                 repository.insertMetadata(com.example.mnpdetector.data.model.Metadata(
-                    "last_update", 
+                    "last_update",
                     Date().toString()
                 ))
                 repository.insertMetadata(com.example.mnpdetector.data.model.Metadata(
-                    "source_url", 
+                    "source_url",
                     sourceUrl
                 ))
                 repository.insertMetadata(com.example.mnpdetector.data.model.Metadata(
-                    "record_count", 
+                    "record_count",
                     mnpNumbers.size.toString()
                 ))
-                
+
                 Result.success()
             } else {
                 Result.failure()

@@ -14,29 +14,29 @@ import javax.inject.Inject
 
 @HiltAndroidApp
 class MNPApplication : Application(), Configuration.Provider {
-    
+
     @Inject
     lateinit var workManagerHelper: WorkManagerHelper
-    
+
     @Inject
-    lateinit var hiltWorkerFactory: HiltWorkerFactory
-    
+    lateinit var workerFactory: HiltWorkerFactory
+
     override fun onCreate() {
         super.onCreate()
-        
+
         // Start the call detection service
         val intent = Intent(this, CallDetectionService::class.java)
         startService(intent)
-        
+
         // Schedule periodic updates
         CoroutineScope(Dispatchers.IO).launch {
             workManagerHelper.schedulePeriodicUpdate()
         }
     }
-    
+
     override fun getWorkManagerConfiguration(): Configuration {
         return Configuration.Builder()
-            .setWorkerFactory(hiltWorkerFactory)
+            .setWorkerFactory(workerFactory)
             .build()
     }
 }

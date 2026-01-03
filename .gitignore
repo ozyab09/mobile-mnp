@@ -5,7 +5,6 @@
 
 # Local configuration files
 local.properties
-gradle.properties
 
 # Android Studio generated files
 *.iml
@@ -19,6 +18,7 @@ gradle.properties
 
 # Android build outputs
 /build/
+app/build/
 !/app/build/outputs/
 
 # Log files
