@@ -1,0 +1,62 @@
+package ru.mobile.mnp.service
+
+import android.telephony.PhoneStateListener
+import android.telephony.TelephonyManager
+import ru.mobile.mnp.repository.MnpRepository
+import ru.mobile.mnp.util.MnpFileParser
+import ru.mobile.mnp.util.PreferencesHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import android.content.Context
+import android.content.Intent
+
+/**
+ * Note: This class uses deprecated PhoneStateListener API which may not work on Android 9+
+ * For newer Android versions, a CallScreeningService would be required
+ */
+class MnpPhoneStateListener(
+    private val context: Context,
+    private val repository: MnpRepository
+) : PhoneStateListener() {
+
+    private val parser = MnpFileParser()
+    private var isIncomingCall = false
+
+    override fun onCallStateChanged(state: Int, phoneNumber: String?) {
+        super.onCallStateChanged(state, phoneNumber)
+
+        when (state) {
+            TelephonyManager.CALL_STATE_RINGING -> {
+                // Incoming call
+                phoneNumber?.let { number ->
+                    val normalizedNumber = parser.normalizePhoneNumber(number)
+                    // Check if the number is in our MNP database
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val mnpRecord = repository.getMnpNumberByNumber(normalizedNumber)
+                        if (mnpRecord != null) {
+                            // Number is ported, show overlay
+                            isIncomingCall = true
+                            val preferencesHelper = PreferencesHelper(context)
+                            val intent = Intent(context, OverlayService::class.java).apply {
+                                putExtra("operator", mnpRecord.operator)
+                                putExtra("number", normalizedNumber)
+                                putExtra("timeout", preferencesHelper.getOverlayTimeout())
+                            }
+                            context.startService(intent)
+                        }
+                    }
+                }
+            }
+            TelephonyManager.CALL_STATE_IDLE -> {
+                // Call ended
+                if (isIncomingCall) {
+                    isIncomingCall = false
+                    // Stop overlay service
+                    val intent = Intent(context, OverlayService::class.java)
+                    context.stopService(intent)
+                }
+            }
+        }
+    }
+}
