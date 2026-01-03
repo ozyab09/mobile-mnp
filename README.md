@@ -25,10 +25,12 @@ An Android application that detects and displays the carrier for incoming calls 
 
 This project includes GitHub Actions workflows for automatic APK building:
 
-- `build-apk.yml` - Builds debug APK on every push
-- `build-and-release.yml` - Builds both debug and release APKs
+- `build-apk.yml` - Builds debug APK on every push, pull request, and manual trigger
+- `build-and-release.yml` - Builds both debug and release APKs on every push, pull request, and manual trigger
 
 The APKs are automatically generated and available as artifacts in the Actions tab after each successful build.
+
+When creating a pull request (MR), the build will automatically run to verify that changes don't break the build process. The APK artifacts will be available for testing after the build completes.
 
 ## Project Structure
 

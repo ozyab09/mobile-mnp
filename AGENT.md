@@ -124,7 +124,8 @@ Where each line contains a phone number and carrier separated by a semicolon.
 - Battery optimization through WorkManager constraints
 
 ## GitHub Actions Integration
-- Automatic APK building on push
+- Automatic APK building on push, pull requests, and manual triggers
 - Debug and release builds
 - Artifact storage for download
 - Workflow files in `.github/workflows/`
+- Build verification for pull requests (MR) with APK artifacts available for testing
