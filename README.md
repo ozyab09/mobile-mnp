@@ -32,8 +32,17 @@ The APKs are automatically generated and available as artifacts in the Actions t
 
 When creating a pull request (MR), the build will automatically run to verify that changes don't break the build process. The APK artifacts will be available for testing after the build completes.
 
-**Note for Local Development**:
-This project requires the `gradle/wrapper/gradle-wrapper.jar` file to run Gradle commands. When cloning this repository, you may need to run `./gradlew` once to download the wrapper JAR file, or use Android Studio to import the project which will automatically set this up.
+**Important Note for GitHub Actions**:
+For the GitHub Actions workflows to work properly, this project requires a complete Android project structure with the `gradle/wrapper/gradle-wrapper.jar` file. This file is automatically included when creating an Android project with Android Studio.
+
+To use this project with GitHub Actions:
+1. Create a new Android project using Android Studio
+2. Copy the source code and resource files from this repository to the new project
+3. Ensure all dependencies in `app/build.gradle` match those specified in this project
+4. The `gradle-wrapper.jar` file will be included automatically
+5. Push the complete project to your GitHub repository
+
+**Note**: The Gradle configuration files have been updated to fix compatibility issues. The project now uses proper syntax for repositoriesMode, buildscript placement, and kapt plugin for Hilt dependency injection. Hilt plugin is now applied manually using 'apply plugin' syntax to avoid conflicts with the plugins block.
 
 ## Project Structure
 
