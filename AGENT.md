@@ -110,6 +110,7 @@ Where each line contains a phone number and carrier separated by a semicolon.
 - Target SDK: 34 (Android 14)
 - Dependencies managed via Gradle
 - GitHub Actions for CI/CD
+- Requires Java 17 for building
 
 ## Security Considerations
 - Uses SharedPreferences in MODE_PRIVATE for settings

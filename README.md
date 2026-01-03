@@ -57,10 +57,11 @@ app/src/main/
 ## Build Instructions
 
 ### Local Build
-1. Clone the repository
-2. Open in Android Studio
-3. Sync the project with Gradle files
-4. Build the project (Build > Make Project)
+1. Ensure you have Java 17 installed
+2. Clone the repository
+3. Open in Android Studio
+4. Sync the project with Gradle files
+5. Build the project (Build > Make Project)
 
 To generate an APK:
 1. In Android Studio: Build > Generate Signed Bundle/APK
