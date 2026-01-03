@@ -130,3 +130,8 @@ Where each line contains a phone number and carrier separated by a semicolon.
 - Artifact storage for download
 - Workflow files in `.github/workflows/`
 - Build verification for pull requests (MR) with APK artifacts available for testing
+
+## Project Setup Notes
+- The project requires `gradle/wrapper/gradle-wrapper.jar` file to run Gradle commands
+- When cloning the repository, run `./gradlew` once to download the wrapper JAR file
+- Or import the project in Android Studio which will automatically set up the wrapper

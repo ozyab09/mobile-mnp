@@ -32,6 +32,9 @@ The APKs are automatically generated and available as artifacts in the Actions t
 
 When creating a pull request (MR), the build will automatically run to verify that changes don't break the build process. The APK artifacts will be available for testing after the build completes.
 
+**Note for Local Development**:
+This project requires the `gradle/wrapper/gradle-wrapper.jar` file to run Gradle commands. When cloning this repository, you may need to run `./gradlew` once to download the wrapper JAR file, or use Android Studio to import the project which will automatically set this up.
+
 ## Project Structure
 
 ```
