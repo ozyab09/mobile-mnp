@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
@@ -54,12 +58,19 @@ jobs:
       - name: Build release APK (debug-signed so it is installable)
         run: ./gradlew assembleRelease -PsignWithDebug --no-daemon
 
-      - name: Create GitHub Release with commit message
+      - name: Create or Update GitHub Release with commit message
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           NOTES=$(git log -1 --pretty=%B)
-          gh release create "${{ steps.version.outputs.release_name }}" \
-            --title "${{ steps.version.outputs.release_name }}" \
-            --notes "$NOTES" \
-            app/build/outputs/apk/release/app-release.apk
+          REL="${{ steps.version.outputs.release_name }}"
+          if gh release view "$REL" >/dev/null 2>&1; then
+            echo "Release $REL already exists - uploading APK"
+            gh release upload "$REL" app/build/outputs/apk/release/app-release.apk --clobber
+            gh release edit "$REL" --notes "$NOTES"
+          else
+            gh release create "$REL" \
+              --title "$REL" \
+              --notes "$NOTES" \
+              app/build/outputs/apk/release/app-release.apk
+          fi
