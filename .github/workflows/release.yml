@@ -1,0 +1,65 @@
+name: Release APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # Semver: bump patch from the latest release tag; falling back to 0.1.0
+      - name: Determine version (semver)
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          LATEST=$(gh release list --limit 1 --json tagName --jq '.[0].tagName' 2>/dev/null || echo "")
+          if [[ -n "$LATEST" && "$LATEST" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            BASE="${LATEST#v}"
+            MAJOR="${BASE%%.*}"
+            REST="${BASE#*.}"
+            MINOR="${REST%%.*}"
+            PATCH="${REST#*.}"
+            PATCH=$((10#$PATCH + 1))
+            VERSION="${MAJOR}.${MINOR}.${PATCH}"
+          else
+            VERSION="0.1.0"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "release_name=v${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Releasing v${VERSION}"
+
+      - name: Set version in build.gradle
+        run: |
+          sed -i "s/versionCode [0-9]*/versionCode ${GITHUB_RUN_NUMBER}/" app/build.gradle
+          sed -i "s/versionName \"[^\"]*\"/versionName \"${{ steps.version.outputs.version }}\"/" app/build.gradle
+
+      - name: Build release APK (debug-signed so it is installable)
+        run: ./gradlew assembleRelease -PsignWithDebug --no-daemon
+
+      - name: Create GitHub Release with commit message
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NOTES=$(git log -1 --pretty=%B)
+          gh release create "${{ steps.version.outputs.release_name }}" \
+            --title "${{ steps.version.outputs.release_name }}" \
+            --notes "$NOTES" \
+            app/build/outputs/apk/release/app-release.apk
